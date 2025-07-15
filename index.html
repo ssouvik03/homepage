@@ -1,0 +1,411 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Souvik's Personal Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .section-padding {
+            padding: 4rem 1rem;
+        }
+        
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        
+        .nav-link.active {
+            color: #059669 !important;
+            background-color: #f0fdf4;
+            border-radius: 0.375rem;
+        }
+        
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating-button {
+            transition: all 0.3s ease;
+        }
+        
+        .floating-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(5, 150, 105, 0.3);
+        }
+        
+        .hero-photo {
+            transition: all 0.5s ease;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .hero-photo:hover {
+            transform: scale(1.02) translateY(-5px);
+            box-shadow: 0 30px 60px rgba(255, 255, 255, 0.2);
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .animate-fade-in-scale {
+            animation: fadeInScale 0.6s ease-out forwards;
+        }
+        
+        .animate-delay-1 { animation-delay: 0.2s; }
+        .animate-delay-2 { animation-delay: 0.4s; }
+        .animate-delay-3 { animation-delay: 0.6s; }
+        .animate-delay-4 { animation-delay: 0.8s; }
+        
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 640px) {
+            .section-padding {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 smooth-scroll">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-10 border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold text-emerald-600">Souvik Shee</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#home" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">Home</a>
+                    <a href="#about" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">About</a>
+                    <a href="#experience" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">Experience</a>
+                    <a href="#publications" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">Publications</a>
+                    <a href="#education" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">Education</a>
+                    <a href="#contact" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="gradient-bg text-white section-padding min-h-screen flex items-center relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Left side - Photo -->
+                <div class="animate-fade-in-scale flex justify-center lg:justify-end">
+                    <img src="photo.jpg" alt="My Photo" class="hero-photo w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-8 border-white shadow-2xl object-cover">
+                </div>
+                
+                <!-- Right side - Content -->
+                <div class="text-center lg:text-left space-y-8">
+                    <div class="animate-fade-in-up animate-delay-1 opacity-0">
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">Hi, I'm <span class="text-emerald-200">Souvik</span>...</h1>
+                        <p class="text-xl md:text-2xl text-emerald-100 mb-8">I like meeting people(sometimes)</p>
+                    </div>
+                    
+                    <!-- Social Media Icons -->
+                    <div class="animate-fade-in-up animate-delay-2 opacity-0">
+                        <div class="flex justify-center lg:justify-start space-x-6 mb-8">
+                            <a href="https://linkedin.com/in/ssouvik03" target="_blank" rel="noopener noreferrer" class="social-icon bg-white text-emerald-600 p-4 rounded-full hover:bg-emerald-50 shadow-xl transition-all duration-300">
+                                <i class="fab fa-linkedin-in text-2xl"></i>
+                            </a>
+                            <a href="https://github.com/ssouvik03" target="_blank" rel="noopener noreferrer" class="social-icon bg-white text-emerald-600 p-4 rounded-full hover:bg-emerald-50 shadow-xl transition-all duration-300">
+                                <i class="fab fa-github text-2xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- CV Download Button -->
+                    <div class="animate-fade-in-up animate-delay-3 opacity-0">
+                        <a href="cv.pdf" download class="floating-button inline-block bg-white text-emerald-600 font-bold py-4 px-8 rounded-xl hover:bg-emerald-50 transition-all duration-300 shadow-2xl text-lg">
+                            <i class="fas fa-download mr-3"></i>Download CV
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-gradient-to-br from-gray-50 to-emerald-50 section-padding">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-gray-900 mb-8 text-center">About Me</h2>
+            <div class="max-w-4xl mx-auto">
+                <p class="text-lg text-gray-700 leading-relaxed text-center">
+                    I'm an aspiring AI Researcher, with a strong interest in interdisciplinary research. I am interested in projects that combine AI with various disciplines such as Environment, Ecology, Chemistry etc. I enjoy the idea how it can solve complex problems and contribute to advancements in science and technology, even if a little. In my free time, you'll often find me indulged in a hobby that I picked up couple of days back. Currently I am teaching myself to play the drums.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="bg-white section-padding">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-gray-900 mb-8 text-center">Experience</h2>
+            <div class="space-y-6">
+                <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 rounded-xl shadow-lg card-hover border border-emerald-100">
+                    <h3 class="text-xl font-semibold text-emerald-800">Summer Research Intern</h3>
+                    <p class="text-emerald-600 font-medium">Norwegian University of Science and Technology, Trondheim, Norway | May 2025 - Present</p>
+                    <p class="text-gray-700 mt-3">Developing AI Techniques to analyze historical herbivory patterns using computer vision and machine learning
+on herbarium sheets with aim to provide valuable insights into historical insect populations and ecological
+research.</p>
+                </div>
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl shadow-lg card-hover border border-blue-100">
+                    <h3 class="text-xl font-semibold text-blue-800">Undergraduate Researcher</h3>
+                    <p class="text-blue-600 font-medium">APP Center for AI Research (APPCAIR), Goa, India | December 2024 - Present</p>
+                    <p class="text-gray-700 mt-3">Working on a novel driver behavior modeling problem to quantify behavioral realism in traffic scenarios, with
+plans to adapt the model for complex traffic conditions in countries like India.</p>
+                </div>
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl shadow-lg card-hover border border-purple-100">
+                    <h3 class="text-xl font-semibold text-purple-800">SDE Intern</h3>
+                    <p class="text-purple-600 font-medium">Indian Red Cross Society West Bengal, Kolkata, India</p>
+                    <p class="text-gray-700 mt-3">Developed a Blood Bank application from scratch for the NGO to facilitate the process of blood donation
+and acceptance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="bg-gradient-to-br from-gray-50 to-emerald-50 section-padding">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-gray-900 mb-8 text-center">Publications/Preprints</h2>
+            <div class="max-w-4xl mx-auto text-center">
+                <div class="bg-white p-8 rounded-xl shadow-lg border border-emerald-100">
+                    <i class="fas fa-file-alt text-4xl text-emerald-600 mb-4"></i>
+                    <p class="text-lg text-gray-700">No publications or preprints available at the moment. Should be up by October this year.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="bg-white section-padding">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-gray-900 mb-8 text-center">Education</h2>
+            <div class="space-y-6">
+                <div class="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 rounded-xl shadow-lg card-hover border border-emerald-100">
+                    <h3 class="text-xl font-semibold text-emerald-800">BITS Pilani, K.K. Birla Goa Campus | 2022 - 2027</h3>
+                    <p class="text-emerald-600 font-medium">M.Sc. in Chemistry</p>
+                    <p class="text-gray-700 mt-3">Worked on interdisciplinary projects involving AI and Chemistry.</p>
+                </div>
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl shadow-lg card-hover border border-blue-100">
+                    <h3 class="text-xl font-semibold text-blue-800">BITS Pilani, K.K. Birla Goa Campus | 2022 - 2027</h3>
+                    <p class="text-blue-600 font-medium">B.E. in Mechanical Engineering</p>
+                    <p class="text-gray-700 mt-3">Barely surrviving.</p>
+                </div>
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl shadow-lg card-hover border border-purple-100">
+                    <h3 class="text-xl font-semibold text-purple-800">BBIT Public School</h3>
+                    <p class="text-purple-600 font-medium">High School Diploma</p>
+                    <p class="text-gray-700 mt-3">Focussed only on getting into a good college, surrvived a pandemic.</p>
+                </div>
+                <div class="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-xl shadow-lg card-hover border border-orange-100">
+                    <h3 class="text-xl font-semibold text-orange-800">Carmel School</h3>
+                    <p class="text-orange-600 font-medium">Primary and Middle School</p>
+                    <p class="text-gray-700 mt-3">Made a ton of friends, played a sport everyday.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-gradient-to-br from-gray-50 to-emerald-50 section-padding">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl font-bold text-gray-900 mb-8 text-center">Contact</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-xl shadow-lg border border-emerald-100">
+                    <p class="text-lg text-gray-700 text-center mb-6">Feel free to reach out to me!</p>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-envelope text-emerald-600 mr-3"></i>
+                            <span class="text-gray-700 mr-2">School's Email:</span>
+                            <a href="mailto:f20221552@goa.bits-pilani.ac.in" class="text-emerald-600 hover:text-emerald-800 hover:underline transition">f20221552@goa.bits-pilani.ac.in</a>
+                        </div>
+                        <div class="flex items-center justify-center">
+                            <i class="fas fa-envelope text-emerald-600 mr-3"></i>
+                            <span class="text-gray-700 mr-2">Personal Email:</span>
+                            <a href="mailto:souvikshee.ap@gmail.com" class="text-emerald-600 hover:text-emerald-800 hover:underline transition">souvikshee.ap@gmail.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-300">A wise man once said: Cats are planning world destruction🐈</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Active section indicator
+        function updateActiveSection() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.offsetHeight;
+                
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Update active section on scroll
+        window.addEventListener('scroll', updateActiveSection);
+        
+        // Trigger home page animations on load
+        window.addEventListener('load', function() {
+            updateActiveSection();
+            
+            // Trigger animations for home section elements
+            const animatedElements = document.querySelectorAll('#home .animate-fade-in-up, #home .animate-fade-in-scale');
+            animatedElements.forEach(element => {
+                element.style.opacity = '1';
+            });
+        });
+        
+        // Add scroll-triggered animations for other sections
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all card elements for scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card-hover');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
