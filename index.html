@@ -155,6 +155,73 @@
             .section-padding {
                 padding: 2rem 1rem;
             }
+            
+            .hero-photo {
+                width: 200px !important;
+                height: 200px !important;
+                margin-bottom: 2rem;
+            }
+            
+            .text-4xl {
+                font-size: 2rem !important;
+            }
+            
+            .text-5xl {
+                font-size: 2.5rem !important;
+            }
+            
+            .text-6xl {
+                font-size: 2.5rem !important;
+            }
+            
+            .nav-mobile {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border-top: 1px solid #e5e7eb;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                z-index: 50;
+            }
+            
+            .nav-mobile.active {
+                display: block;
+            }
+            
+            .nav-mobile a {
+                display: block;
+                padding: 1rem;
+                border-bottom: 1px solid #f3f4f6;
+                text-align: center;
+            }
+            
+            .grid-cols-1 {
+                gap: 2rem !important;
+            }
+            
+            .space-x-6 > * + * {
+                margin-left: 1rem !important;
+            }
+            
+            .py-4 {
+                padding-top: 0.75rem !important;
+                padding-bottom: 0.75rem !important;
+            }
+            
+            .px-8 {
+                padding-left: 1.5rem !important;
+                padding-right: 1.5rem !important;
+            }
+            
+            .text-lg {
+                font-size: 1rem !important;
+            }
+            
+            .social-icon {
+                padding: 0.75rem !important;
+            }
         }
     </style>
 </head>
@@ -166,7 +233,9 @@
                 <div class="flex items-center">
                     <span class="text-2xl font-bold text-emerald-600">Souvik Shee</span>
                 </div>
-                <div class="flex items-center space-x-4">
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-4">
                     <a href="#home" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">Home</a>
                     <a href="#about" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">About</a>
                     <a href="#experience" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">Experience</a>
@@ -174,6 +243,23 @@
                     <a href="#education" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">Education</a>
                     <a href="#contact" class="nav-link text-gray-600 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium transition">Contact</a>
                 </div>
+                
+                <!-- Mobile Hamburger -->
+                <div class="md:hidden flex items-center">
+                    <button class="hamburger text-emerald-600 text-2xl" onclick="toggleMobileNav()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div class="nav-mobile md:hidden" id="mobileNav">
+                <a href="#home" class="nav-link text-gray-600 hover:text-emerald-600 transition" onclick="closeMobileNav()">Home</a>
+                <a href="#about" class="nav-link text-gray-600 hover:text-emerald-600 transition" onclick="closeMobileNav()">About</a>
+                <a href="#experience" class="nav-link text-gray-600 hover:text-emerald-600 transition" onclick="closeMobileNav()">Experience</a>
+                <a href="#publications" class="nav-link text-gray-600 hover:text-emerald-600 transition" onclick="closeMobileNav()">Publications</a>
+                <a href="#education" class="nav-link text-gray-600 hover:text-emerald-600 transition" onclick="closeMobileNav()">Education</a>
+                <a href="#contact" class="nav-link text-gray-600 hover:text-emerald-600 transition" onclick="closeMobileNav()">Contact</a>
             </div>
         </div>
     </nav>
@@ -181,35 +267,35 @@
     <!-- Home Section -->
     <section id="home" class="gradient-bg text-white section-padding min-h-screen flex items-center relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Left side - Photo -->
-                <div class="animate-fade-in-scale flex justify-center lg:justify-end">
-                    <img src="photo.jpg" alt="My Photo" class="hero-photo w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-8 border-white shadow-2xl object-cover">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <!-- Photo - appears first on mobile -->
+                <div class="animate-fade-in-scale flex justify-center lg:justify-end order-1 lg:order-1">
+                    <img src="photo.jpg" alt="My Photo" class="hero-photo w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full border-4 sm:border-8 border-white shadow-2xl object-cover">
                 </div>
                 
-                <!-- Right side - Content -->
-                <div class="text-center lg:text-left space-y-8">
+                <!-- Content - appears second on mobile -->
+                <div class="text-center lg:text-left space-y-4 sm:space-y-6 lg:space-y-8 order-2 lg:order-2">
                     <div class="animate-fade-in-up animate-delay-1 opacity-0">
-                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white">Hi, I'm <span class="text-emerald-200">Souvik</span>...</h1>
-                        <p class="text-xl md:text-2xl text-emerald-100 mb-8">I like meeting people(sometimes)</p>
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 text-white leading-tight">Hi, I'm <span class="text-emerald-200">Souvik</span>...</h1>
+                        <p class="text-lg sm:text-xl md:text-2xl text-emerald-100 mb-6 sm:mb-8">I like meeting people(sometimes)</p>
                     </div>
                     
                     <!-- Social Media Icons -->
                     <div class="animate-fade-in-up animate-delay-2 opacity-0">
-                        <div class="flex justify-center lg:justify-start space-x-6 mb-8">
-                            <a href="https://linkedin.com/in/ssouvik03" target="_blank" rel="noopener noreferrer" class="social-icon bg-white text-emerald-600 p-4 rounded-full hover:bg-emerald-50 shadow-xl transition-all duration-300">
-                                <i class="fab fa-linkedin-in text-2xl"></i>
+                        <div class="flex justify-center lg:justify-start space-x-4 sm:space-x-6 mb-6 sm:mb-8">
+                            <a href="https://linkedin.com/in/ssouvik03" target="_blank" rel="noopener noreferrer" class="social-icon bg-white text-emerald-600 p-3 sm:p-4 rounded-full hover:bg-emerald-50 shadow-xl transition-all duration-300">
+                                <i class="fab fa-linkedin-in text-xl sm:text-2xl"></i>
                             </a>
-                            <a href="https://github.com/ssouvik03" target="_blank" rel="noopener noreferrer" class="social-icon bg-white text-emerald-600 p-4 rounded-full hover:bg-emerald-50 shadow-xl transition-all duration-300">
-                                <i class="fab fa-github text-2xl"></i>
+                            <a href="https://github.com/ssouvik03" target="_blank" rel="noopener noreferrer" class="social-icon bg-white text-emerald-600 p-3 sm:p-4 rounded-full hover:bg-emerald-50 shadow-xl transition-all duration-300">
+                                <i class="fab fa-github text-xl sm:text-2xl"></i>
                             </a>
                         </div>
                     </div>
                     
                     <!-- CV Download Button -->
                     <div class="animate-fade-in-up animate-delay-3 opacity-0">
-                        <a href="cv.pdf" download class="floating-button inline-block bg-white text-emerald-600 font-bold py-4 px-8 rounded-xl hover:bg-emerald-50 transition-all duration-300 shadow-2xl text-lg">
-                            <i class="fas fa-download mr-3"></i>Download CV
+                        <a href="cv.pdf" download class="floating-button inline-block bg-white text-emerald-600 font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl hover:bg-emerald-50 transition-all duration-300 shadow-2xl text-base sm:text-lg">
+                            <i class="fas fa-download mr-2 sm:mr-3"></i>Download CV
                         </a>
                     </div>
                 </div>
@@ -249,7 +335,7 @@ plans to adapt the model for complex traffic conditions in countries like India.
                 </div>
                 <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl shadow-lg card-hover border border-purple-100">
                     <h3 class="text-xl font-semibold text-purple-800">SDE Intern</h3>
-                    <p class="text-purple-600 font-medium">Indian Red Cross Society West Bengal, Kolkata, India</p>
+                    <p class="text-purple-600 font-medium">Indian Red Cross Society West Bengal, Kolkata, India | May 2024 - July 2024</p>
                     <p class="text-gray-700 mt-3">Developed a Blood Bank application from scratch for the NGO to facilitate the process of blood donation
 and acceptance.</p>
                 </div>
@@ -302,20 +388,24 @@ and acceptance.</p>
     <!-- Contact Section -->
     <section id="contact" class="bg-gradient-to-br from-gray-50 to-emerald-50 section-padding">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-bold text-gray-900 mb-8 text-center">Contact</h2>
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-6 sm:mb-8 text-center">Contact</h2>
             <div class="max-w-4xl mx-auto">
-                <div class="bg-white p-8 rounded-xl shadow-lg border border-emerald-100">
-                    <p class="text-lg text-gray-700 text-center mb-6">Feel free to reach out to me!</p>
+                <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg border border-emerald-100">
+                    <p class="text-base sm:text-lg text-gray-700 text-center mb-6">Feel free to reach out to me!</p>
                     <div class="space-y-4">
-                        <div class="flex items-center justify-center">
-                            <i class="fas fa-envelope text-emerald-600 mr-3"></i>
-                            <span class="text-gray-700 mr-2">School's Email:</span>
-                            <a href="mailto:f20221552@goa.bits-pilani.ac.in" class="text-emerald-600 hover:text-emerald-800 hover:underline transition">f20221552@goa.bits-pilani.ac.in</a>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center text-center sm:text-left">
+                            <div class="flex items-center justify-center sm:justify-start mb-2 sm:mb-0">
+                                <i class="fas fa-envelope text-emerald-600 mr-3"></i>
+                                <span class="text-gray-700 mr-2 text-sm sm:text-base">School's Email:</span>
+                            </div>
+                            <a href="mailto:f20221552@goa.bits-pilani.ac.in" class="text-emerald-600 hover:text-emerald-800 hover:underline transition text-sm sm:text-base break-all">f20221552@goa.bits-pilani.ac.in</a>
                         </div>
-                        <div class="flex items-center justify-center">
-                            <i class="fas fa-envelope text-emerald-600 mr-3"></i>
-                            <span class="text-gray-700 mr-2">Personal Email:</span>
-                            <a href="mailto:souvikshee.ap@gmail.com" class="text-emerald-600 hover:text-emerald-800 hover:underline transition">souvikshee.ap@gmail.com</a>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-center text-center sm:text-left">
+                            <div class="flex items-center justify-center sm:justify-start mb-2 sm:mb-0">
+                                <i class="fas fa-envelope text-emerald-600 mr-3"></i>
+                                <span class="text-gray-700 mr-2 text-sm sm:text-base">Personal Email:</span>
+                            </div>
+                            <a href="mailto:souvikshee.ap@gmail.com" class="text-emerald-600 hover:text-emerald-800 hover:underline transition text-sm sm:text-base">souvikshee.ap@gmail.com</a>
                         </div>
                     </div>
                 </div>
@@ -331,6 +421,28 @@ and acceptance.</p>
     </footer>
 
     <script>
+        // Mobile navigation functions
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobileNav');
+            const hamburger = document.querySelector('.hamburger i');
+            
+            mobileNav.classList.toggle('active');
+            
+            if (mobileNav.classList.contains('active')) {
+                hamburger.className = 'fas fa-times';
+            } else {
+                hamburger.className = 'fas fa-bars';
+            }
+        }
+        
+        function closeMobileNav() {
+            const mobileNav = document.getElementById('mobileNav');
+            const hamburger = document.querySelector('.hamburger i');
+            
+            mobileNav.classList.remove('active');
+            hamburger.className = 'fas fa-bars';
+        }
+        
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -369,6 +481,9 @@ and acceptance.</p>
 
         // Update active section on scroll
         window.addEventListener('scroll', updateActiveSection);
+        
+        // Close mobile nav on scroll
+        window.addEventListener('scroll', closeMobileNav);
         
         // Trigger home page animations on load
         window.addEventListener('load', function() {
